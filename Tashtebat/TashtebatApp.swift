@@ -11,7 +11,12 @@ import SwiftUI
 struct TashtebatApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            NavigationStack{
+                LaunchScreen()
+            }
+            .hideBackButton()
+            .navigationBarHidden(true)
+            .navigationBarBackButtonHidden(true)
         }
     }
 }
