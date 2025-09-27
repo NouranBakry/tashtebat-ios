@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct TashtebatApp: App {
+struct TashtibatApp: App {
 
     var body: some Scene {
         WindowGroup{

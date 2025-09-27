@@ -7,26 +7,26 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		0631FFAA2D15D25900F1004D /* Tashtebat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tashtebat.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0631FFAA2D15D25900F1004D /* Tashtibat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tashtibat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		069BB6C12D18F4B9003D0C5A /* Exceptions for "Tashtebat" folder in "Tashtebat" target */ = {
+		069BB6C12D18F4B9003D0C5A /* Exceptions for "Tashtibat" folder in "Tashtibat" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = 0631FFA92D15D25900F1004D /* Tashtebat */;
+			target = 0631FFA92D15D25900F1004D /* Tashtibat */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		0631FFAC2D15D25900F1004D /* Tashtebat */ = {
+		0631FFAC2D15D25900F1004D /* Tashtibat */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				069BB6C12D18F4B9003D0C5A /* Exceptions for "Tashtebat" folder in "Tashtebat" target */,
+				069BB6C12D18F4B9003D0C5A /* Exceptions for "Tashtibat" folder in "Tashtibat" target */,
 			);
-			path = Tashtebat;
+			path = Tashtibat;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -45,7 +45,7 @@
 		0631FFA12D15D25900F1004D = {
 			isa = PBXGroup;
 			children = (
-				0631FFAC2D15D25900F1004D /* Tashtebat */,
+				0631FFAC2D15D25900F1004D /* Tashtibat */,
 				0631FFAB2D15D25900F1004D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -53,7 +53,7 @@
 		0631FFAB2D15D25900F1004D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				0631FFAA2D15D25900F1004D /* Tashtebat.app */,
+				0631FFAA2D15D25900F1004D /* Tashtibat.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -61,9 +61,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		0631FFA92D15D25900F1004D /* Tashtebat */ = {
+		0631FFA92D15D25900F1004D /* Tashtibat */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 0631FFB82D15D25B00F1004D /* Build configuration list for PBXNativeTarget "Tashtebat" */;
+			buildConfigurationList = 0631FFB82D15D25B00F1004D /* Build configuration list for PBXNativeTarget "Tashtibat" */;
 			buildPhases = (
 				0631FFA62D15D25900F1004D /* Sources */,
 				0631FFA72D15D25900F1004D /* Frameworks */,
@@ -74,13 +74,13 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				0631FFAC2D15D25900F1004D /* Tashtebat */,
+				0631FFAC2D15D25900F1004D /* Tashtibat */,
 			);
-			name = Tashtebat;
+			name = Tashtibat;
 			packageProductDependencies = (
 			);
 			productName = Tashtebat;
-			productReference = 0631FFAA2D15D25900F1004D /* Tashtebat.app */;
+			productReference = 0631FFAA2D15D25900F1004D /* Tashtibat.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -98,7 +98,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 0631FFA52D15D25900F1004D /* Build configuration list for PBXProject "Tashtebat" */;
+			buildConfigurationList = 0631FFA52D15D25900F1004D /* Build configuration list for PBXProject "Tashtibat" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -113,7 +113,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				0631FFA92D15D25900F1004D /* Tashtebat */,
+				0631FFA92D15D25900F1004D /* Tashtibat */,
 			);
 		};
 /* End PBXProject section */
@@ -263,14 +263,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Tashtebat/Preview Content\"";
-				DEVELOPMENT_TEAM = ZDL6KK44LD;
+				DEVELOPMENT_ASSET_PATHS = "\"Tashtibat/Preview Content\"";
+				DEVELOPMENT_TEAM = 6XLM5954PP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Tashtebat/Info.plist;
+				INFOPLIST_FILE = Tashtibat/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Tashtibat;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.shopping";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -281,7 +284,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Tashtebat;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tashtibat.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -295,14 +298,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Tashtebat/Preview Content\"";
-				DEVELOPMENT_TEAM = ZDL6KK44LD;
+				DEVELOPMENT_ASSET_PATHS = "\"Tashtibat/Preview Content\"";
+				DEVELOPMENT_TEAM = 6XLM5954PP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Tashtebat/Info.plist;
+				INFOPLIST_FILE = Tashtibat/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Tashtibat;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.shopping";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -313,7 +319,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Tashtebat;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tashtibat.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -325,7 +331,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0631FFA52D15D25900F1004D /* Build configuration list for PBXProject "Tashtebat" */ = {
+		0631FFA52D15D25900F1004D /* Build configuration list for PBXProject "Tashtibat" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0631FFB62D15D25B00F1004D /* Debug */,
@@ -334,7 +340,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		0631FFB82D15D25B00F1004D /* Build configuration list for PBXNativeTarget "Tashtebat" */ = {
+		0631FFB82D15D25B00F1004D /* Build configuration list for PBXNativeTarget "Tashtibat" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0631FFB92D15D25B00F1004D /* Debug */,

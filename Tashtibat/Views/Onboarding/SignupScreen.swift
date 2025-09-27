@@ -51,6 +51,7 @@ struct SignupScreen: View {
                             .background(Color.gray.opacity(0.1))
                             .cornerRadius(12)
                             .autocapitalization(.words)
+                        //TODO: onChange is deprecated
                             .onChange(of: name, perform: validateName)
                         
                         if let error = nameError {
@@ -74,6 +75,7 @@ struct SignupScreen: View {
                                 .background(Color.gray.opacity(0.1))
                                 .cornerRadius(12)
                                 .keyboardType(.numberPad)
+                                .onChange(of: phoneNumber, perform: validatePhoneNumber)
                         }
                         
                         if let error = phoneNumberError {
@@ -147,13 +149,13 @@ struct SignupScreen: View {
                     }
                     
                     // Sign up with Google button
-                    Button(action: signUpAction) {
-                        Image("google_signup")
-                    }
+//                    Button(action: signUpAction) {
+//                        Image("google_signup")
+//                    }
                     // Sign up with facebook button
-                    Button(action: signUpAction){
-                        Image("facebook_signup")
-                    }
+//                    Button(action: signUpAction){
+//                        Image("facebook_signup")
+//                    }
                     Spacer()
                     
                     // Terms and conditions
@@ -187,6 +189,25 @@ struct SignupScreen: View {
             nameError = nil
         }
     }
+    
+    // Phone number validation
+    func validatePhoneNumber(_ value: String) {
+        let regEx = "^[0-9]{11}$"
+        if value.isEmpty {
+            phoneNumberError = "Phone number cannot be empty."
+        } else if !value.contains(where: { ("0"..."9").contains($0) } ) {
+            phoneNumberError = "Please enter a valid phone number."
+        } else {
+            let phoneCheck = NSPredicate(format: "SELF MATCHES %@", regEx)
+            let validPhone = phoneCheck.evaluate(with: value)
+            if (validPhone){
+                phoneNumberError = nil
+            } else {
+                phoneNumberError = "Phone number is invalid."
+            }
+        }
+    }
+    
     struct CheckboxToggleStyle: ToggleStyle {
         func makeBody(configuration: Configuration) -> some View {
             HStack {
@@ -234,6 +255,7 @@ struct SignupScreen: View {
                 print("✅ User registered successfully!")
                 isSignedUp = true  // Navigate to HomeScreen
             } else {
+                // TODO: Show Error if sign up failed
                 print("❌ Registration failed: \(error ?? "Unknown error")")
             }
         }

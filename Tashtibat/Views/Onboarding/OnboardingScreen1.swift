@@ -35,7 +35,7 @@ struct OnboardingScreen1: View {
                             .lineSpacing(22.4)
                             .foregroundColor(.black)
 
-                        Text("Explore our catalog and discover the perfect additions for your home.")
+                        Text("OnboardingScreen1 Paragraph")
                             .font(.custom("Alexandria", size: 13).weight(.light))
                             .lineSpacing(18.2)
                             .foregroundColor(Color(red: 0.28, green: 0.28, blue: 0.28))
@@ -44,18 +44,19 @@ struct OnboardingScreen1: View {
                     .frame(width: 280)
 
                     ZStack {
-                        Text("Skip")
-                            .font(.custom("Alexandria", size: 13))
-                            .foregroundColor(Color(red: 1, green: 0.60, blue: 0))
-                            .frame(maxWidth: .infinity, alignment: .leading)
-
-                        HStack(spacing: 7) {
-                            Image("Frame 52478")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 50, height: 6)
+                        NavigationLink(destination: SignupScreen()){
+                            Text("Skip")
+                                .font(.custom("Alexandria", size: 13))
+                                .foregroundColor(Color(red: 1, green: 0.60, blue: 0))
+                                .frame(maxWidth: .infinity, alignment: .leading)
                         }
-
+                            HStack(spacing: 7) {
+                                Image("Frame 52478")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 50, height: 6)
+                            }
+                        
                         NavigationLink(destination: OnboardingScreen2()) {
                             Image("onboarding_next_button")
                                 .resizable()

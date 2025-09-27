@@ -34,25 +34,28 @@ struct OnboardingScreen2: View {
                             .font(Font.custom("Alexandria", size: 16))
                             .lineSpacing(22.40)
                             .foregroundColor(.black)
-                        Text("Browse, choose, and enjoy seamless cash-on-delivery.")
+                        Text("OnboardingScreen2 Paragraph")
                             .font(Font.custom("Alexandria", size: 13).weight(.light))
                             .lineSpacing(18.20)
                             .foregroundColor(Color(red: 0.28, green: 0.28, blue: 0.28))
                     }
                     .frame(width: 280, height: 66);
                     ZStack() {
-                        Text("Skip")
-                            .font(Font.custom("Alexandria", size: 13))
-                            .lineSpacing(18.20)
-                            .foregroundColor(Color(red: 1, green: 0.60, blue: 0))
-                            .offset(x: -157, y: 0)
-                        HStack(alignment: .top, spacing: 7) {
-                            Image("Frame 52478")
-                                .resizable()
-                                .scaledToFit()
+                        NavigationLink(destination: SignupScreen()){
+                            Text("Skip")
+                                .font(Font.custom("Alexandria", size: 13))
+                                .lineSpacing(18.20)
+                                .foregroundColor(Color(red: 1, green: 0.60, blue: 0))
+                                .offset(x: -157, y: 0)
                         }
-                        .frame(width: 50, height: 6)
-                        .offset(x: -9.50, y: 0)
+                            HStack(alignment: .top, spacing: 7) {
+                                Image("Frame 52478")
+                                    .resizable()
+                                    .scaledToFit()
+                            }
+                            .frame(width: 50, height: 6)
+                            .offset(x: -9.50, y: 0)
+                        
                         HStack(alignment: .top, spacing: 8) {
                             NavigationLink(destination: OnboardingScreen3()){
                                 Image("onboarding_next_button")

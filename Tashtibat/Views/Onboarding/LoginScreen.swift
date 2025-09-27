@@ -76,17 +76,17 @@ struct LoginScreen : View {
                     }
                     .frame(width: 343, height: 15)
                     
-                    HStack {
-                        Button(action: {}) {
-                            Image("google_login")
-                        }
-                    }
+//                    HStack {
+//                        Button(action: {}) {
+//                            Image("google_login")
+//                        }
+//                    }
                     
-                    HStack {
-                        Button(action: {}) {
-                            Image("facebook_login")
-                        }
-                    }
+//                    HStack {
+//                        Button(action: {}) {
+//                            Image("facebook_login")
+//                        }
+//                    }
                     
                     Spacer()
                     

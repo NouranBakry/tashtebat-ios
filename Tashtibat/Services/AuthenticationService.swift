@@ -1,6 +1,6 @@
 //
 //  AuthenticationService.swift
-//  Tashtebat
+//  Tashtibat
 //
 //  Created by Nouran Bakry on 17/02/2025.
 //
@@ -38,12 +38,9 @@ struct User: Codable {
 
 class AuthenticationService {
     static let shared = AuthenticationService() //singleton instance
-    private let baseURL = "http://192.168.1.30:9000"  // 192.168.1.3 is my IP because running on iphone, we use 127.0.0.1 is running a simulator
-    
+    private let baseURL = "https://tashtibat-admin.xyz"
     private init() {}
-    
-    //TODO: Login API Call
-    
+        
     func login(email: String, password: String, completion: @escaping (Bool, String?) -> Void) {
         let url = URL(string: "\(baseURL)/auth/customer/emailpass")! // Medusa store auth endpoint
         var request = URLRequest(url: url)
@@ -82,7 +79,7 @@ class AuthenticationService {
         }.resume()
     }
     
-    // TODO: remove token on logoug UserDefaults.standard.removeObject(forKey: "authToken")
+    // TODO: remove token on logout UserDefaults.standard.removeObject(forKey: "authToken")
     // TODO: Implement Log out
     
     func signUp(email: String, password: String, phoneNumber: String, name: String, completion: @escaping (Bool, String?) -> Void){
@@ -107,7 +104,7 @@ class AuthenticationService {
         }
     }
     
-    private func getToken(email: String, password: String, completion: @escaping (String?, String?) -> Void) {
+    public func getToken(email: String, password: String, completion: @escaping (String?, String?) -> Void) {
         let registerUrl = URL(string: "\(baseURL)/auth/customer/emailpass/register")!  // Replace with actual URL
         
         var request = URLRequest(url: registerUrl)
@@ -185,5 +182,11 @@ class AuthenticationService {
             print("✅ Customer registration successful!")
             completion(true, nil)
         }.resume()
+    }
+    
+    public func signout(email: String, token: String){
+        // TODO: remove token on logout
+        UserDefaults.standard.removeObject(forKey: "authToken")
+        
     }
 }

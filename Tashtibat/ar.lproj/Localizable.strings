@@ -1,0 +1,20 @@
+//
+//  Localizable.strings
+//  Tashtebat
+//
+//  Created by Nouran Bakry on 01/06/2025.
+//
+
+"Seamless Shopping" = "التسوق السلس";
+"OnboardingScreen1 Paragraph" = "استكشف الكتالوج الخاص بنا واكتشف الإضافات المثالية لمنزلك";
+"Skip" = "تخطي";
+"Exclusive Offers" = "العروض الحصرية";
+;"تصفح واختر واستمتع بخدمة الدفع النقدي عند التسليم بسلاسة." = "OnboardingScreen2 Paragraph"
+"Personalized Recommendations" = "توصيات حسب تفضيلاتك";
+"OnboardingScreen3 Paragraph" = "دعنا نجعل المساحة الخاصة بك فريدة من نوعها لك!";
+"Sign up" = "إنشاء حساب";
+"Elevate your home. Create Account now!" = "ارفع مستوى منزلك. ,قم بإنشاء حساب الآن!";
+"Name" = "الاسم";
+"Phone Number" = "رقم الهاتف";
+"Email" = "البريد الإلكتروني";
+"Password" = "كلمة المرور";
