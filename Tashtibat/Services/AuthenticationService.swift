@@ -29,9 +29,10 @@ struct CustomerResponse: Codable {
     let message: String?
 }
 
-struct User: Codable {
+struct User: Codable,Identifiable {
     let id: String
     let email: String
+    let phone: String
     let first_name: String?
     let last_name: String?
 }

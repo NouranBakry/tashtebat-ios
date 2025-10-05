@@ -10,9 +10,13 @@ import SwiftUI
 @main
 struct TashtibatApp: App {
 
+    @StateObject private var favoritesManager = FavoritesManager()
+    @StateObject private var userManager = UserManager.shared
+
     var body: some Scene {
         WindowGroup{
-            RootView()
+            RootView().environmentObject(favoritesManager)
+                .environmentObject(userManager)
         }
     }
 }

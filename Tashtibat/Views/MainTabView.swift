@@ -11,35 +11,35 @@ struct MainTabView: View {
     var body: some View {
         NavigationStack{
             TabView {
+                // Home Tab
                 HomeScreen()
                     .tabItem {
                         Image(systemName: "house.fill")
                         Text("Home")
+                            .font(AppTypography.CaptionBold())
+
                     }
                 
-                //            NavigationStack {
-                //                CategoriesView()
-                //            }
-                //            .tabItem {
-                //                Image(systemName: "square.grid.2x2.fill")
-                //                Text("Categories")
-                //            }
+                CategoriesScreen()
+                    .tabItem {
+                        Label("Categories", systemImage: "square.grid.2x2.fill")
+                            .font(AppTypography.CaptionBold())
+
+                    }
                 
-                //            NavigationStack {
-                //                FavoritesView()
-                //            }
-                //            .tabItem {
-                //                Image(systemName: "heart.fill")
-                //                Text("Favorites")
-                //            }
+                FavoritesScreen()
+                    .tabItem {
+                        Label("Favorites", systemImage: "heart.fill")
+                            .font(AppTypography.CaptionBold())
+                    }
                 
                 Profile()
                     .tabItem {
-                        Image(systemName: "person.fill")
-                        Text("Profile")
+                        Label("Profile", systemImage: "person.fill")
+                            .font(AppTypography.CaptionBold())
                     }
             }
-            .accentColor(.blue) // Change active tab color
+            .accentColor(AppColor.primary500) // Change active tab color
         }
     }
 }

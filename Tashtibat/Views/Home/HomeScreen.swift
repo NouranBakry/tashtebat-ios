@@ -1,16 +1,8 @@
 //
 //  HomeScreen.swift
-//  Tashtebat
+//  Tashtibat
 //
 //  Created by Nouran Bakry on 17/02/2025.
-//
-
-//
-//  HomeScreen.swift
-//  Tashtebat
-//
-//  Created by Nouran Bakry on 17/02/2025.
-//
 
 import SwiftUI
 
@@ -18,17 +10,17 @@ struct HomeScreen: View {
     @State private var searchQuery: String = ""
     @State private var products: [Product] = []
     @State private var vendors: [Vendor] = []
+    @State private var showCart = false
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ScrollView {
                 VStack(spacing: 16) {
                     // Home title section
                     ZStack() {
                         HStack(alignment: .bottom) {
                             Text("Home")
-                                .font(Font.custom("Alexandria", size: 20))
-                                .lineSpacing(28)
+                                .font(AppTypography.H3())
                                 .foregroundColor(.white)
                             
                             Spacer()
@@ -177,7 +169,11 @@ struct HomeScreen: View {
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 16) {
                                 ForEach(products, id: \.id) { product in
-                                    ProductCardView(product: product)
+                                    NavigationLink(destination: ProductDetails(product: product)) {
+                                                    ProductCardView(product: product)
+                                                }
+                                                .buttonStyle(.plain)
+                                    
                                 }
                             }
                             .padding(.horizontal)
@@ -210,14 +206,31 @@ struct HomeScreen: View {
                             }
                             .padding(.horizontal)
                         }
+                        //cart button
+                        VStack{
+                            Spacer()
+                            HStack {
+                                Spacer() // push to right
+                                CartButton(showCart: $showCart, itemCount: 0)
+                                    .frame(width: 56, height: 56)
+                                    .shadow(color: .gray.opacity(0.4), radius: 4, x: 2, y: 2)
+                                    .padding(.trailing, 16)
+                                    .padding(.bottom, 16) // above tab bar
+                            }
+                        }
+
                     }
                 }
             }
             .navigationBarHidden(true)
+            .ignoresSafeArea(edges: .top)
             .onAppear {
                 ProductService.shared.fetchProducts { fetchedProducts in
                     self.products = fetchedProducts
                 }
+            }
+            .navigationDestination(isPresented: $showCart) {
+                CartScreen()
             }
         }
     }
@@ -225,6 +238,7 @@ struct HomeScreen: View {
 
 struct HomeScreen_Previews: PreviewProvider {
     static var previews: some View {
-        HomeScreen()
+        HomeScreen().environmentObject(FavoritesManager())
     }
 }
+

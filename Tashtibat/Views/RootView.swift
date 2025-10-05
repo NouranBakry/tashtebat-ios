@@ -10,10 +10,11 @@ import SwiftUI
 
 struct RootView: View {
     @AppStorage("isLoggedIn") private var storedIsLoggedIn: Bool = false
-    @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
+    @AppStorage("hasSeenOnboarding") var hasSeenOnboarding = false
     
     @State private var isLoggedIn: Bool = false // ✅ Use @State for UI updates
     @State private var showLaunchScreen = true
+    
     var body: some View {
         VStack{
             if showLaunchScreen{
@@ -31,11 +32,13 @@ struct RootView: View {
             }
         }
         .onAppear {
-            // ✅ Sync @State with @AppStorage when RootView appears
             isLoggedIn = storedIsLoggedIn
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                showLaunchScreen = false
+            }
         }
         .onChange(of: storedIsLoggedIn) { newValue in
-            isLoggedIn = newValue  // ✅ Ensure updates trigger re-render
+            isLoggedIn = newValue
         }
     }
 }

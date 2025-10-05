@@ -14,3 +14,8 @@ struct CartScreen: View{
         }
     }
 }
+struct CartScreen_Previews: PreviewProvider {
+    static var previews: some View {
+        CartScreen()
+    }
+}

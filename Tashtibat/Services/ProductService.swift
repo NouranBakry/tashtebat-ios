@@ -9,12 +9,19 @@ import Foundation
 // TODO: check medusa store/products vs /products do I need an api key or jwt token or sth
 // TODO: check product model, variants, etc.. same for vendors and categories
 
+struct ProductImage: Codable{
+    let id: String?
+    let url: String?
+    let rank: Int?
+}
 // This struct represents the overall API response from Medusa.
-struct Product: Codable {
+struct Product: Codable, Identifiable {
     let id: String?
     let title: String?
     let status: String?
+    let images: [ProductImage]
     let description: String?
+    let price: Double?
 }
 
 struct ProductResponse: Codable {
@@ -23,7 +30,6 @@ struct ProductResponse: Codable {
     let count: Int?
     let products: [Product]
 }
-
 
 
 class ProductService {

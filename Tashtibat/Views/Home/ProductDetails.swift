@@ -1,479 +1,310 @@
 //
 //  ProductDetails.swift
-//  Tashtebat
+//  Tashtibat
 //
-//  Created by Nouran Bakry on 10/03/2025.
+//  Created by Nouran Bakry on 17/02/2025.
 //
 
 import SwiftUI
 
 struct ProductDetails: View {
+    let product: Product
+    @EnvironmentObject var favoritesManager: FavoritesManager
+    @Environment(\.dismiss) private var dismiss
+    
+    @State private var selectedImageIndex = 0
+    @State private var isFavorite = false
+    @State private var showCart = false
+    @State private var quantity = 1
+
     var body: some View {
-        NavigationView {
-            ScrollView{
-                ZStack {
-                    VStack( spacing: 24) {
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Product details")
-                                .font(Font.custom("Alexandria", size: 20))
-                                .lineSpacing(28)
+        ZStack {
+            ScrollView {
+                VStack(spacing: 24) {
+                    // --- Header: Product details + Share button
+                    HStack {
+                        Button(action: {
+                            dismiss()
+                        }) {
+                            Image(systemName: "chevron.left")
                                 .foregroundColor(.black)
-                            
-                            ZStack() {
-                                Image("Bitcino product 1").resizable()
-                            }
-                            .frame(width: 343, height: 343)
-                            
-                            HStack(alignment: .top, spacing: 16) {
-                                ZStack() {
-                                    Image("bitcino view 1").resizable()
-                                }
-                                .frame(width: 74, height: 79)
-                                .background(.white)
-                                
-                                ZStack() {
-                                    Image("bitcino view 2").resizable()
-                                }
-                                .frame(width: 74, height: 80)
-                                .background(.white)
-                                
-                                ZStack() {
-                                    Rectangle()
-                                    Image("bitcino view 3").resizable()
-                                }
-                                .frame(width: 73, height: 75)
-                                .background(.white)
-                                .cornerRadius(12)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .inset(by: 0.50)
-                                        .stroke(Color(red: 0.96, green: 0.96, blue: 0.96), lineWidth: 0.50)
-                                )
-                            }
+                                .font(.system(size: 20, weight: .medium))
+                                .padding()
                         }
-                        Text("Bticino Matix Edge Schuko Socket, 1 Module, 16 A, Different Colors")
-                            .font(Font.custom("Alexandria", size: 16))
-                            .lineSpacing(22.40)
+                        Text("Product Details")
+                            .font(.custom("Alexandria", size: 20))
                             .foregroundColor(.black)
-                        HStack(spacing: 8) {
-                            Text("In Stock")
-                                .font(Font.custom("Alexandria", size: 13))
-                                .lineSpacing(18.20)
-                                .foregroundColor(Color(red: 0.16, green: 0.65, blue: 0.27))
+                        Spacer()
+                        Button(action: shareProduct) {
+                            Image(systemName: "square.and.arrow.up")
+                                .font(.system(size: 18))
+                                .foregroundColor(.black)
                         }
-                        .padding(8)
-                        .background(Color(red: 0.92, green: 0.96, blue: 0.93))
-                        .cornerRadius(8)
-                        
-                        //                    VStack(alignment: .leading, spacing: 8) {
-                        //                        Text("Color : Light Grey")
-                        //                            .font(Font.custom("Alexandria", size: 13))
-                        //                            .lineSpacing(18.20)
-                        //                            .foregroundColor(.black)
-                        //                        HStack(alignment: .top, spacing: 8) {
-                        //                            HStack(alignment: .top, spacing: 8) {
-                        //                                Ellipse()
-                        //                                    .foregroundColor(.clear)
-                        //                                    .frame(width: 34, height: 34)
-                        //                                    .background(Color(red: 0.86, green: 0.82, blue: 0.76))
-                        //                            }
-                        //                            .padding(4)
-                        //                            .overlay(
-                        //                                RoundedRectangle(cornerRadius: 50)
-                        //                                    .inset(by: 1)
-                        //                                    .stroke(Color(red: 0.09, green: 0.10, blue: 0.12), lineWidth: 1)
-                        //                            )
-                        //                            HStack(alignment: .top, spacing: 8) {
-                        //                                Ellipse()
-                        //                                    .foregroundColor(.clear)
-                        //                                    .frame(width: 34, height: 34)
-                        //                                    .background(Color(red: 1, green: 0.29, blue: 0))
-                        //                            }
-                        //                            .padding(4)
-                        //                            .cornerRadius(50)
-                        //                            HStack(alignment: .top, spacing: 8) {
-                        //                                Ellipse()
-                        //                                    .foregroundColor(.clear)
-                        //                                    .frame(width: 34, height: 34)
-                        //                                    .background(Color(red: 0.96, green: 0.85, blue: 0.02))
-                        //                            }
-                        //                            .padding(4)
-                        //                            .cornerRadius(50)
-                        //                        }
-                        //                    }
-                        
-                        HStack(spacing: 8) {
-                            HStack(alignment: .top, spacing: 8) {
-                                VStack(alignment: .leading, spacing: 0) {
-                                    Text("Sold by :")
-                                        .font(Font.custom("Alexandria", size: 11).weight(.light))
-                                        .lineSpacing(15.40)
-                                        .foregroundColor(.black)
-                                    HStack(spacing: 4) {
-                                        Text("4.3 (119)")
-                                            .font(Font.custom("Alexandria", size: 11).weight(.bold))
-                                            .lineSpacing(15.40)
-                                            .foregroundColor(Color(red: 0.16, green: 0.65, blue: 0.27))
+                    }
+                    .padding(.horizontal)
+
+                    // --- Main product image with favorite button
+                    ZStack(alignment: .topTrailing) {
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color.white)
+                            .frame(height: 340)
+                            .shadow(color: .gray.opacity(0.1), radius: 4)
+
+                        if let imageURL = product.images[safe: selectedImageIndex]?.url,
+                           let url = URL(string: imageURL) {
+                            AsyncImage(url: url) { image in
+                                image
+                                    .cornerRadius(12)
+                                    .padding()
+                            } placeholder: {
+                                ProgressView()
+                            }
+                        }
+
+                        Button(action: { favoritesManager.toggleFavorite(product)}) {
+                            Image(systemName: favoritesManager.isFavorite(product) ? "heart.fill" : "heart")
+                                .font(.system(size: 22))
+                                .foregroundColor(favoritesManager.isFavorite(product) ? .red : .gray)
+                                .padding()
+                        }
+                    }
+                    .padding(.horizontal)
+
+                    // --- Thumbnails
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 12) {
+                            ForEach(product.images.indices, id: \.self) { i in
+                                if let url = URL(string: product.images[i].url!) {
+                                    AsyncImage(url: url) { image in
+                                        image
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 74, height: 74)
+                                            .cornerRadius(12)
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 12)
+                                                    .stroke(i == selectedImageIndex ? Color.orange : Color.gray.opacity(0.3), lineWidth: 1)
+                                            )
+                                    } placeholder: {
+                                        Color.gray.opacity(0.1)
+                                            .frame(width: 74, height: 74)
+                                            .cornerRadius(12)
                                     }
-                                    .frame(height: 20)
-                                    .cornerRadius(20)
+                                    .onTapGesture { selectedImageIndex = i }
                                 }
                             }
-                            ZStack() {
-                                Rectangle()
-                                    .foregroundColor(.clear)
-                                    .frame(width: 25, height: 33)
-                                    .background(Image("ghareeb vendor").resizable())
-                            }
+                        }
+                        .padding(.horizontal)
+                    }
+
+                    // --- Product Title
+                    Text(product.title ?? "Product name")
+                        .font(.custom("Alexandria", size: 16))
+                        .foregroundColor(.black)
+                        .padding(.horizontal)
+
+                    // --- Stock Status
+                    HStack {
+                        Text(product.status == "in_stock" ? "In Stock" : "Out of Stock")
+                            .font(.custom("Alexandria", size: 13))
+                            .foregroundColor(product.status == "in_stock" ? .green : .red)
+                            .padding(8)
+                            .background(product.status == "in_stock" ? Color.green.opacity(0.1) : Color.red.opacity(0.1))
+                            .cornerRadius(8)
+                        Spacer()
+                    }
+                    .padding(.horizontal)
+
+                     //--- Vendor Info
+                    HStack(spacing: 12) {
+                        VStack(alignment: .leading) {
+                            Text("Sold by:")
+                                .font(.custom("Alexandria", size: 13))
+                                .foregroundColor(.black)
+//                            Text(product.vendor ?? "Unknown Vendor")
+//                                .font(.custom("Alexandria", size: 13).weight(.bold))
+//                                .foregroundColor(.orange)
+                     }
+                        Spacer()
+                        Image("ghareeb vendor")
+                            .resizable()
                             .frame(width: 50, height: 50)
-                            .background(.white)
                             .cornerRadius(8)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 8)
-                                    .inset(by: 0.50)
-                                    .stroke(Color(red: 0.89, green: 0.89, blue: 0.89), lineWidth: 0.50)
+                                    .stroke(Color.gray.opacity(0.3), lineWidth: 0.5)
                             )
+                    }
+                    .padding()
+                    .background(Color(red: 0.96, green: 0.96, blue: 0.96))
+                    .cornerRadius(8)
+                    .padding(.horizontal)
+
+                    // --- Description
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Description")
+                            .font(.custom("Alexandria", size: 14).weight(.bold))
+                        Text(product.description ?? "No description available.")
+                            .font(.custom("Alexandria", size: 12))
+                            .foregroundColor(.gray)
+                    }
+                    .padding(.horizontal)
+
+                    // --- Specifications section
+//                    VStack(alignment: .leading, spacing: 6) {
+//                        Text("Specifications")
+//                            .font(.custom("Alexandria", size: 14).weight(.bold))
+//                            .foregroundColor(.orange)
+//                        VStack(alignment: .leading, spacing: 6) {
+//                            ForEach(product.specs ?? [], id: \.key) { spec in
+//                                HStack {
+//                                    Text(spec.key)
+//                                        .font(.custom("Alexandria", size: 12))
+//                                    Spacer()
+//                                    Text(spec.value)
+//                                        .font(.custom("Alexandria", size: 12))
+//                                        .foregroundColor(.gray)
+//                                }
+//                                Divider()
+//                            }
+//                        }
+//                        .padding(12)
+//                        .background(Color.white)
+//                        .cornerRadius(8)
+//                        .shadow(color: .gray.opacity(0.05), radius: 3)
+//                    }
+//                    .padding(.horizontal)
+
+                    // --- Info Badges
+                    HStack(spacing: 16) {
+                        InfoBadge(icon: "creditcard", title: "Cash on Delivery", subtitle: "Payment")
+                        Divider().frame(height: 50)
+                        InfoBadge(icon: "arrow.uturn.left", title: "Return for Free", subtitle: "Within 14 days")
+                    }
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(12)
+                    .padding(.horizontal)
+
+                    // --- Price and Quantity
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text("\(product.price ?? 0, specifier: "%.2f") EGP")
+                                .font(.custom("Alexandria", size: 20).weight(.bold))
+                                .foregroundColor(.orange)
+                            Text("Includes VAT")
+                                .font(.custom("Alexandria", size: 11))
+                                .foregroundColor(.gray)
                         }
-                        .padding(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
-                        .frame(maxWidth: .infinity, minHeight: 72, maxHeight: 72)
-                        .background(Color(red: 0.96, green: 0.96, blue: 0.96))
+
+                        Spacer()
+
+                        HStack {
+                            Button(action: { if quantity > 1 { quantity -= 1 } }) {
+                                Image(systemName: "minus")
+                            }
+                            Text("\(quantity)")
+                                .frame(width: 30)
+                            Button(action: { quantity += 1 }) {
+                                Image(systemName: "plus")
+                            }
+                        }
+                        .padding(8)
+                        .background(Color.gray.opacity(0.1))
                         .cornerRadius(8)
-                        
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Description")
-                                .font(Font.custom("Alexandria", size: 13))
-                                .lineSpacing(18.20)
-                                .foregroundColor(.black)
-                            Text("⁠Sockets are primarily used to provide a safe and convenient means of connecting electrical devices to a power supply. They allow for the transfer of electrical energy from the power source to devices such as lamps, appliances, electronics, and other electrical equipment. ")
-                                .font(Font.custom("Alexandria", size: 11).weight(.light))
-                                .lineSpacing(15.40)
-                                .foregroundColor(Color(red: 0.28, green: 0.28, blue: 0.28))
-                        }
-                        VStack(alignment: .leading, spacing: 8) {
-                            HStack(spacing: 16) {
-                                HStack(spacing: 8) {
-                                    Text("Specification")
-                                        .font(Font.custom("Alexandria", size: 13))
-                                        .lineSpacing(18.20)
-                                        .foregroundColor(Color(red: 1, green: 0.60, blue: 0))
-                                }
-                                .overlay(
-                                    Rectangle()
-                                        .inset(by: 0.50)
-                                        .stroke(Color(red: 1, green: 0.60, blue: 0), lineWidth: 0.50)
-                                )
-                                HStack(spacing: 8) {
-                                    Text("Reviews")
-                                        .font(Font.custom("Alexandria", size: 13).weight(.light))
-                                        .lineSpacing(18.20)
-                                        .foregroundColor(Color(red: 0.66, green: 0.66, blue: 0.66))
-                                }
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            }
-                            .frame(width: 343, height: 48)
-                            .overlay(
-                                Rectangle()
-                                    .inset(by: 0.50)
-                                    .stroke(Color(red: 0.89, green: 0.89, blue: 0.89), lineWidth: 0.50)
-                            )
-                            VStack(alignment: .leading, spacing: 0) {
-                                ZStack() {
-                                    HStack() {
-                                        Text("SKU")
-                                            .font(Font.custom("Alexandria", size: 11))
-                                            .lineSpacing(15.40)
-                                            .foregroundColor(.black)
-                                        Text("D4803M1")
-                                            .font(Font.custom("Alexandria", size: 11).weight(.light))
-                                            .lineSpacing(15.40)
-                                            .foregroundColor(Color(red: 0.28, green: 0.28, blue: 0.28))
-                                    }
-                                    .frame(width: 179, height: 15)
-                                }
-                                .frame(width: 343, height: 24)
-                                .cornerRadius(4)
-                                ZStack() {
-                                    HStack() {
-                                        Text("Brand")
-                                            .font(Font.custom("Alexandria", size: 11))
-                                            .lineSpacing(15.40)
-                                            .foregroundColor(.black)
-                                        Text("Bticino")
-                                            .font(Font.custom("Alexandria", size: 11).weight(.light))
-                                            .lineSpacing(15.40)
-                                            .foregroundColor(Color(red: 0.28, green: 0.28, blue: 0.28))
-                                    }
-                                    .frame(width: 167, height: 15)
-                                }
-                                .frame(width: 343, height: 24)
-                                .background(Color(red: 0.96, green: 0.96, blue: 0.96))
-                                .cornerRadius(4)
-                                ZStack() {
-                                    HStack() {
-                                        Text("Material")
-                                            .font(Font.custom("Alexandria", size: 11))
-                                            .lineSpacing(15.40)
-                                            .foregroundColor(.black)
-                                        Text("Plastic")
-                                            .font(Font.custom("Alexandria", size: 11).weight(.light))
-                                            .lineSpacing(15.40)
-                                            .foregroundColor(Color(red: 0.28, green: 0.28, blue: 0.28))
-                                    }
-                                    .frame(width: 164, height: 15)
-                                }
-                                .frame(width: 343, height: 24)
-                                .cornerRadius(4)
-                                ZStack() {
-                                    HStack() {
-                                        Text("Color")
-                                            .font(Font.custom("Alexandria", size: 11))
-                                            .lineSpacing(15.40)
-                                            .foregroundColor(.black)
-                                        Text("-")
-                                            .font(Font.custom("Alexandria", size: 11).weight(.light))
-                                            .lineSpacing(15.40)
-                                            .foregroundColor(Color(red: 0.28, green: 0.28, blue: 0.28))
-                                        
-                                    }
-                                    .frame(width: 133, height: 15)
-                                }
-                                .frame(width: 343, height: 24)
-                                .background(Color(red: 0.96, green: 0.96, blue: 0.96))
-                                .cornerRadius(4)
-                                ZStack() {
-                                    HStack() {
-                                        Text("Unit")
-                                            .font(Font.custom("Alexandria", size: 11))
-                                            .lineSpacing(15.40)
-                                            .foregroundColor(.black)
-                                        Text("Piece")
-                                            .font(Font.custom("Alexandria", size: 11).weight(.light))
-                                            .lineSpacing(15.40)
-                                            .foregroundColor(Color(red: 0.28, green: 0.28, blue: 0.28))
-                                        
-                                    }
-                                    .frame(width: 158, height: 15)
-                                }
-                                .frame(width: 343, height: 24)
-                                .cornerRadius(4)
-                                ZStack() {
-                                    HStack() {
-                                        Text("Frame Size")
-                                            .font(Font.custom("Alexandria", size: 11))
-                                            .lineSpacing(15.40)
-                                            .foregroundColor(.black)
-                                            .offset(x: -60.50, y: 0)
-                                        Text("10 x 7 cm²")
-                                            .font(Font.custom("Alexandria", size: 11).weight(.light))
-                                            .lineSpacing(15.40)
-                                            .foregroundColor(Color(red: 0.28, green: 0.28, blue: 0.28))
-                                        
-                                    }
-                                    .frame(width: 182, height: 15)
-                                }
-                                .frame(width: 343, height: 24)
-                                .background(Color(red: 0.96, green: 0.96, blue: 0.96))
-                                .cornerRadius(4)
-                                ZStack() {
-                                    HStack() {
-                                        Text("Country of Origin")
-                                            .font(Font.custom("Alexandria", size: 11))
-                                            .lineSpacing(15.40)
-                                            .foregroundColor(.black)
-                                        Text("Egypt")
-                                            .font(Font.custom("Alexandria", size: 11).weight(.light))
-                                            .lineSpacing(15.40)
-                                            .foregroundColor(Color(red: 0.28, green: 0.28, blue: 0.28))
-                                        
-                                    }
-                                    .frame(width: 160, height: 15)
-                                }
-                                .frame(width: 343, height: 24)
-                                .cornerRadius(4)
-                                ZStack() {
-                                    HStack() {
-                                        Text("Warranty")
-                                            .font(Font.custom("Alexandria", size: 11))
-                                            .lineSpacing(15.40)
-                                            .foregroundColor(.black)
-                                        
-                                        Text("Against Manufacturing Defects")
-                                            .font(Font.custom("Alexandria", size: 11).weight(.light))
-                                            .lineSpacing(15.40)
-                                            .foregroundColor(Color(red: 0.28, green: 0.28, blue: 0.28))
-                                        
-                                    }
-                                    .frame(width: 294, height: 15)
-                                }
-                                .frame(width: 343, height: 24)
-                                .background(Color(red: 0.96, green: 0.96, blue: 0.96))
-                                .cornerRadius(4)
-                            }
-                            .cornerRadius(12)
-                        }
-                        HStack(spacing: 8) {
-                            VStack {
-                                ZStack() {
-                                    Image("Wallet").resizable()
-                                }
-                                .frame(width: 24, height: 24)
-                                Text("Cash on Delivery")
-                                    .font(Font.custom("Alexandria", size: 11))
-                                    .foregroundColor(.black)
-                                Text("Payment")
-                                    .font(Font.custom("Alexandria", size: 11).weight(.light))
-                                    .foregroundColor(Color(red: 0.66, green: 0.66, blue: 0.66))
-                            }
-                            Rectangle()
-                                .foregroundColor(.clear)
-                                .frame(width: 61, height: 0)
-                                .overlay(
-                                    Rectangle()
-                                        .stroke(Color(red: 0.96, green: 0.96, blue: 0.96), lineWidth: 0.50)
-                                )
-                            VStack {
-                                ZStack() {
-                                    Image("Calendar").resizable()
-                                }
-                                .frame(width: 24, height: 24)
-                                Text("Schedule Order")
-                                    .font(Font.custom("Alexandria", size: 11))
-                                    .foregroundColor(.black)
-                                Text("up to 7 days")
-                                    .font(Font.custom("Alexandria", size: 11).weight(.light))
-                                    .foregroundColor(Color(red: 0.66, green: 0.66, blue: 0.66))
-                            }
-                            Rectangle()
-                                .foregroundColor(.clear)
-                                .frame(width: 61, height: 0)
-                                .overlay(
-                                    Rectangle()
-                                        .stroke(Color(red: 0.96, green: 0.96, blue: 0.96), lineWidth: 0.50)
-                                )
-                            VStack {
-                                ZStack() {
-                                    Image("Sync-retry").resizable()
-                                }
-                                .frame(width: 24, height: 24)
-                                Text("Return for free")
-                                    .font(Font.custom("Alexandria", size: 11))
-                                    .foregroundColor(.black)
-                                Text("Within 14 days")
-                                    .font(Font.custom("Alexandria", size: 11).weight(.light))
-                                    .foregroundColor(Color(red: 0.66, green: 0.66, blue: 0.66))
-                            }
-                        }
-                        .padding(EdgeInsets(top: 16, leading: 8, bottom: 16, trailing: 8))
-                        .background(.white)
-                        .cornerRadius(12)
-                        
-                        
-                        VStack(alignment: .leading, spacing: 8) {
-                            HStack(spacing: 4) {
-                                Text("The price includes VAT")
-                                    .font(Font.custom("Alexandria", size: 11).weight(.light))
-                                    .lineSpacing(15.40)
-                                    .foregroundColor(Color(red: 0.28, green: 0.28, blue: 0.28))
-                            }
-                            HStack(spacing: 8) {
-                                Text("Delivery between 7-15 working days")
-                                    .font(Font.custom("Alexandria", size: 11).weight(.light))
-                                    .lineSpacing(15.40)
-                                    .foregroundColor(Color(red: 0.28, green: 0.28, blue: 0.28))
-                                HStack(spacing: 8) {
-                                    Text("Need Help ?")
-                                        .font(Font.custom("Alexandria", size: 11).weight(.light))
-                                        .lineSpacing(15.40)
-                                        .underline()
-                                        .foregroundColor(Color(red: 0.28, green: 0.28, blue: 0.28))
-                                }
-                            }
-                        }
-                        
-                        // price and unit
-                        HStack() {
-                            VStack(spacing: 4) {
-                                Text("23.50")
-                                    .font(Font.custom("Alexandria", size: 20).weight(.bold))
-                                    .lineSpacing(28)
-                                    .foregroundColor(Color(red: 1, green: 0.60, blue: 0))
-                                Text("EGP")
-                                    .font(Font.custom("Alexandria", size: 11).weight(.light))
-                                    .lineSpacing(15.40)
-                                    .foregroundColor(Color(red: 1, green: 0.60, blue: 0))
-                            }
-                            VStack {
-                                Text("40,00 EGP")
-                                    .font(Font.custom("Alexandria", size: 11).weight(.light))
-                                    .lineSpacing(15.40)
-                                    .strikethrough()
-                                    .foregroundColor(Color(red: 0.66, green: 0.66, blue: 0.66))
-                            }
-                            
-                            HStack(spacing: 8) {
-                                HStack {
-                                    Text("Unit :")
-                                        .font(Font.custom("Alexandria", size: 11).weight(.light))
-                                        .lineSpacing(15.40)
-                                        .foregroundColor(Color(red: 0.28, green: 0.28, blue: 0.28))
-                                    Text("Piece")
-                                        .font(Font.custom("Alexandria", size: 13))
-                                        .lineSpacing(18.20)
-                                        .foregroundColor(Color(red: 0.28, green: 0.28, blue: 0.28))
-                                }
-                                HStack() {
-                                    Text("1")
-                                        .font(Font.custom("Alexandria", size: 16))
-                                        .lineSpacing(22.40)
-                                        .foregroundColor(.black)
-                                    
-                                }
-                                .frame(width: 87, height: 48)
+                    }
+                    .padding(.horizontal)
+
+                    // --- Buttons
+                    HStack(spacing: 8) {
+                        Button(action: { /* Buy Now Action */ }) {
+                            Text("Buy Now")
+                                .font(.custom("Alexandria", size: 16))
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 48)
+                                .background(Color.orange)
                                 .cornerRadius(12)
+                        }
+
+                        Button(action: { /* Add to Cart */ }) {
+                            Text("Add to Cart")
+                                .font(.custom("Alexandria", size: 16))
+                                .foregroundColor(.orange)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 48)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 12)
-                                        .inset(by: 0.50)
-                                        .stroke(Color(red: 0.84, green: 0.84, blue: 0.84), lineWidth: 0.50)
+                                        .stroke(Color.orange, lineWidth: 1)
                                 )
-                            }
-                        }
-                        .frame(width: 343)
-                        
-                        // buttons
-                        HStack (spacing: 4){
-                            NavigationLink(destination: CheckoutDeliveryScreen()){
-                                VStack() {
-                                    Text("Buy Now")
-                                        .font(Font.custom("Alexandria", size: 16))
-                                        .lineSpacing(22.40)
-                                        .foregroundColor(.white)
-                                }
-                                .frame(width: 167.50, height: 48)
-                                .background(Color(red: 1, green: 0.60, blue: 0))
-                                .cornerRadius(12)
-                            }
-                            // TODO: FIX this shouldn't go to screen but just add the object to cart and maybe show the added to cart screen
-                            NavigationLink (destination: CartScreen()){
-                                VStack(spacing: 8) {
-                                    Text("Add to Cart")
-                                        .font(Font.custom("Alexandria", size: 16))
-                                        .lineSpacing(22.40)
-                                        .foregroundColor(Color(red: 1, green: 0.60, blue: 0))
-                                }
-                                .frame(width: 167.50, height: 48)
-                                .cornerRadius(12)
-                            }
                         }
                     }
-                    .padding(.horizontal, 32)
+                    .padding(.horizontal)
+                    .padding(.bottom, 90)
+                }
+                .padding(.top)
+            }
+
+            // --- Floating Cart Button
+            VStack {
+                Spacer()
+                HStack {
+                    Spacer()
+                    CartButton(showCart: $showCart, itemCount: 0)
+                        .padding(.trailing, 24)
+                        .padding(.bottom, 100)
                 }
             }
         }
+        .ignoresSafeArea(edges: .bottom)
+        .navigationBarHidden(true)
+        .navigationDestination(isPresented: $showCart) {
+            CartScreen()
+        }
+    }
+    
+
+    // Share Function
+    func shareProduct() {
+        guard let url = URL(string: "https://tashtibateg.com/product/\(product.id)") else { return }
+        let activityVC = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        UIApplication.shared.connectedScenes
+            .compactMap { ($0 as? UIWindowScene)?.keyWindow }
+            .first?
+            .rootViewController?
+            .present(activityVC, animated: true)
+    }
+}
+
+// --- Supporting small views
+struct InfoBadge: View {
+    let icon: String
+    let title: String
+    let subtitle: String
+
+    var body: some View {
+        VStack {
+            Image(systemName: icon)
+                .font(.system(size: 20))
+                .foregroundColor(.orange)
+            Text(title)
+                .font(.custom("Alexandria", size: 11))
+                .foregroundColor(.black)
+            Text(subtitle)
+                .font(.custom("Alexandria", size: 11).weight(.light))
+                .foregroundColor(.gray)
+        }
+    }
+}
+
+extension Collection {
+    subscript(safe index: Index) -> Element? {
+        indices.contains(index) ? self[index] : nil
     }
 }
 
 struct ProductDetails_Previews: PreviewProvider {
     static var previews: some View {
-        ProductDetails()
+        ProductDetails(product: Product( id: "1", title: "Bticino Matix Edge Schuko Socket", status: "published", images: [ ProductImage( id: "1", url: "https://example.com/image.png", rank: 1 ) ], description: "Sockets are primarily used to provide a safe and convenient means of connecting electrical devices to a power supply.", price: 23.50)).environmentObject(FavoritesManager())
     }
 }

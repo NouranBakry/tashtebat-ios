@@ -14,160 +14,107 @@ struct SignupScreen: View {
     @State private var name: String = ""
     @State private var phoneNumber: String = ""
     @State private var password: String = ""
+    
     @State private var emailError: String? = nil
     @State private var nameError: String? = nil
     @State private var phoneNumberError: String? = nil
+    
     @State private var isChecked = false
     @State private var isLoading = false
+    
     @State private var errorMessage: String?
-    @State private var isSignedUp = false // Track sign-up completion
+    @State private var isSignedUp = false
     
     
     
     var body: some View {
         NavigationStack {
             ZStack {
-                // Background color
-                Color.white
-                    .edgesIgnoringSafeArea(.all)
-                
-                VStack(spacing: 16) {
-                    // Title Section
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Sign up")
-                            .font(Font.custom("Alexandria", size: 24))
-                            .foregroundColor(.black)
-                        Text("Elevate your home. Create Account now!")
-                            .font(Font.custom("Alexandria", size: 13).weight(.light))
-                            .foregroundColor(Color(red: 0.28, green: 0.28, blue: 0.28))
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.bottom, 16)
-                    
-                    // Name Input
-                    VStack(alignment: .leading, spacing: 4) {
-                        TextField("Name", text: $name, prompt: Text("Name").foregroundColor(.gray))
-                            .padding()
-                            .background(Color.gray.opacity(0.1))
-                            .cornerRadius(12)
-                            .autocapitalization(.words)
-                        //TODO: onChange is deprecated
-                            .onChange(of: name, perform: validateName)
-                        
-                        if let error = nameError {
-                            Text(error)
-                                .foregroundColor(.red)
-                                .font(.caption)
-                        }
-                    }
-                    
-                    // Phone Number Input
-                    VStack(alignment: .leading, spacing: 4) {
-                        HStack {
-                            Image("egyptian flag")
-                                .padding(.horizontal)
-                                .frame(height: 44)
-                                .background(Color.gray.opacity(0.1))
-                                .cornerRadius(12)
-                            
-                            TextField("Phone number", text: $phoneNumber)
-                                .padding()
-                                .background(Color.gray.opacity(0.1))
-                                .cornerRadius(12)
-                                .keyboardType(.numberPad)
-                                .onChange(of: phoneNumber, perform: validatePhoneNumber)
-                        }
-                        
-                        if let error = phoneNumberError {
-                            Text(error)
-                                .foregroundColor(.red)
-                                .font(.caption)
-                        }
-                    }
-                    
-                    // Email Input
-                    VStack(alignment: .leading, spacing: 4) {
-                        TextField("Email", text: $email, prompt:Text("Email").foregroundColor(Color.gray))
-                            .padding()
-                            .background(Color.gray.opacity(0.1))
-                            .cornerRadius(12)
-                            .autocapitalization(.none)
-                            .keyboardType(.emailAddress)
-                            .onChange(of: email, perform: validateEmail)
-                        
-                        if let error = emailError {
-                            Text(error)
-                                .foregroundColor(.red)
-                                .font(.caption)
-                        }
-                    }
-                    
-                    // Password
-                    VStack(alignment: .leading, spacing: 4){
-                        SecureField("Password", text: $password, prompt:Text("Password").foregroundColor(Color.gray))
-                            .padding()
-                            .background(Color.gray.opacity(0.1))
-                            .cornerRadius(12)
-                            .autocapitalization(.none)
-                    }
-                    
-                    // Login Navigation
+                Color.white.ignoresSafeArea()
+                ScrollView(.vertical, showsIndicators: false) {
                     VStack(spacing: 16) {
-                        HStack(alignment: .top, spacing: 8) {
-                            Text("Already have an account ?")
+                        // Title Section
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Sign up")
+                                .font(Font.custom("Alexandria", size: 24))
+                                .foregroundColor(.black)
+                            Text("Elevate your home. Create Account now!")
                                 .font(Font.custom("Alexandria", size: 13).weight(.light))
-                                .lineSpacing(18.20)
                                 .foregroundColor(Color(red: 0.28, green: 0.28, blue: 0.28))
-                            NavigationLink (destination: LoginScreen()){
-                                Text("Log in")
-                                    .font(Font.custom("Alexandria", size: 13))
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.bottom, 16)
+                        
+                        // InputField name
+                        InputField(title: "Name", text: $name, error: $nameError)
+                            .onChange(of: name){
+                                validateName(name)
+                            }
+                        
+                        InputField(title: "Phone number", text: $phoneNumber, error: $phoneNumberError, leadingIcon: Image("egyptian flag"))
+                            .onChange(of: phoneNumber){ validatePhoneNumber(phoneNumber)}
+                            .keyboardType(.numberPad)
+                        
+                        InputField(title: "Email", text: $email, error: $emailError)
+                            .onChange(of: email) { newValue in
+                                validateEmail(newValue)
+                            }
+                            .keyboardType(.emailAddress)
+                        
+                        InputField(title: "Password", text: $password, error: .constant(nil), isSecure: true)
+                        
+                        
+                        // Login Navigation
+                        VStack(spacing: 16) {
+                            HStack(alignment: .top, spacing: 8) {
+                                Text("Already have an account ?")
+                                    .font(Font.custom("Alexandria", size: 13).weight(.light))
                                     .lineSpacing(18.20)
-                                    .foregroundColor(Color(red: 1, green: 0.60, blue: 0))
+                                    .foregroundColor(Color(red: 0.28, green: 0.28, blue: 0.28))
+                                NavigationLink (destination: LoginScreen()){
+                                    Text("Log in")
+                                        .font(Font.custom("Alexandria", size: 13))
+                                        .lineSpacing(18.20)
+                                        .foregroundColor(Color(red: 1, green: 0.60, blue: 0))
+                                }
                             }
                         }
-                    }
-                    // I accept all terms and conditions checkbox
-                    HStack(spacing: 8) {
-                        Toggle(isOn:$isChecked){
-                            Text("I accept all terms & conditions.")
-                                .font(Font.custom("Alexandria", size: 13).weight(.light))
-                                .lineSpacing(18.20)
-                                .foregroundColor(.black)
-                                .frame(width: 216, height: 18);
+                        // Terms and conditions
+                        HStack(spacing: 8) {
+                            Toggle(isOn:$isChecked){
+                                Text("I accept all terms & conditions.")
+                                    .font(Font.custom("Alexandria", size: 13).weight(.light))
+                                    .lineSpacing(18.20)
+                                    .foregroundColor(.black)
+                                    .frame(width: 216, height: 18);
+                            }
+                            .toggleStyle(CheckboxToggleStyle())
                         }
-                        .toggleStyle(CheckboxToggleStyle())
+                        .frame(width: 216, height: 18)
+                        
+                        HorizontalButton(title: isLoading ? "Signing up..." : "Sign up", action: handleSignUp)
+                            .disabled(isLoading)
+                            .padding(.top, 40)
+                        // Hidden NavigationLink that activates when isSignedUp is true
+                        NavigationLink(destination: HomeScreen(), isActive: $isSignedUp) {
+                            EmptyView()
+                        }
+                        
+                        Spacer()
+                        
+                        // Terms and conditions
+                        Text("By signing up, you agree to our Terms and Privacy Policy.")
+                            .font(Font.custom("Alexandria", size: 11))
+                            .foregroundColor(.gray)
+                            .multilineTextAlignment(.center)
+                            .padding(.top, 16)
                     }
-                    .frame(width: 216, height: 18)
-                    // Sign up button
-                    // Sign up button
-                    HorizontalButton(title: isLoading ? "Signing up..." : "Sign up", action: handleSignUp)
-                        .disabled(isLoading)
-                        .padding(.top, 40)
-                    // Hidden NavigationLink that activates when isSignedUp is true
-                    NavigationLink(destination: HomeScreen(), isActive: $isSignedUp) {
-                        EmptyView()
-                    }
-                    
-                    // Sign up with Google button
-//                    Button(action: signUpAction) {
-//                        Image("google_signup")
-//                    }
-                    // Sign up with facebook button
-//                    Button(action: signUpAction){
-//                        Image("facebook_signup")
-//                    }
-                    Spacer()
-                    
-                    // Terms and conditions
-                    Text("By signing up, you agree to our Terms and Privacy Policy.")
-                        .font(Font.custom("Alexandria", size: 11))
-                        .foregroundColor(.gray)
-                        .multilineTextAlignment(.center)
-                        .padding(.top, 16)
-                }
-                .padding(.horizontal, 24)
+                    .padding(.horizontal, 24)
+                } // ← close ScrollView here
             }
         }
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
     }
     
     // Email validation logic
@@ -280,6 +227,48 @@ struct SignupScreen: View {
                         .foregroundColor(.red)
                         .font(.caption)
                 }
+            }
+        }
+    }
+}
+
+struct InputField: View {
+    let title: String
+    @Binding var text: String
+    @Binding var error: String?
+    var isSecure: Bool = false
+    var leadingIcon: Image? = nil
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack {
+                if let icon = leadingIcon {
+                    icon
+                        .padding(.horizontal, 8)
+                        .frame(height: 44)
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(12)
+                }
+                
+                if isSecure {
+                    SecureField(title, text: $text)
+                        .padding()
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(12)
+                        .autocapitalization(.none)
+                } else {
+                    TextField(title, text: $text)
+                        .padding()
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(12)
+                        .autocapitalization(.none)
+                }
+            }
+            
+            if let error = error {
+                Text(error)
+                    .foregroundColor(.red)
+                    .font(.caption)
             }
         }
     }

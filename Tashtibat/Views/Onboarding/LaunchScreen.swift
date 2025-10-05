@@ -16,7 +16,7 @@ struct LaunchScreen: View {
                 Color.white
                     .edgesIgnoringSafeArea(.all) // Extend the background to the entire screen
                 VStack {
-                    Image("logo")
+                    Image("logoFrame")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 150, height: 150)

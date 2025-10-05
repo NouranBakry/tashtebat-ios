@@ -1,78 +1,69 @@
-//
-//  OnboardingScreen1.swift
-//  Tashtebat
-//
-//  Created by Nouran Bakry on 30/12/2024.
-//
-
 import SwiftUI
 
 struct OnboardingScreen1: View {
+    @AppStorage("hasSeenOnboarding") var hasSeenOnboarding: Bool = false
+    
     var body: some View {
         NavigationStack {
             ZStack {
-                // Set the background to white
-                Color.white
-                    .edgesIgnoringSafeArea(.all) // Extend to cover safe areas
-
-                VStack(spacing: 20) {
+                Color.white.ignoresSafeArea()
+                // Background ellipse + image
+                VStack {
                     ZStack {
                         Ellipse()
-                            .fill(Color(red: 1, green: 0.92, blue: 0.80)) // Fill color for the ellipse
+                            .fill(AppColor.primary100)
                             .frame(width: 513, height: 515)
                             .offset(x: 2, y: -204.5)
-
-                        Image("plant") // Replace with your image name
+                        
+                        Image("plant")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 150, height: 150)
                             .offset(y: -50)
                     }
-
+                    .frame(width: 513, height: 515)
+                    
                     VStack(spacing: 8) {
                         Text("Seamless Shopping")
-                            .font(.custom("Alexandria", size: 16))
-                            .lineSpacing(22.4)
+                            .font(AppTypography.Title())
                             .foregroundColor(.black)
-
+                            .multilineTextAlignment(.center)
+                        
                         Text("OnboardingScreen1 Paragraph")
-                            .font(.custom("Alexandria", size: 13).weight(.light))
-                            .lineSpacing(18.2)
-                            .foregroundColor(Color(red: 0.28, green: 0.28, blue: 0.28))
+                            .font(AppTypography.BodyLight())
+                            .foregroundColor(AppColor.grey900)
                             .multilineTextAlignment(.center)
                     }
                     .frame(width: 280)
-
-                    ZStack {
-                        NavigationLink(destination: SignupScreen()){
+                    .padding(.bottom, 40)
+                    
+                    // Buttons pinned at bottom
+                    HStack() {
+                        Button(action: { hasSeenOnboarding = true }) {
                             Text("Skip")
-                                .font(.custom("Alexandria", size: 13))
-                                .foregroundColor(Color(red: 1, green: 0.60, blue: 0))
-                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .font(AppTypography.Body())
+                                .foregroundColor(AppColor.primary500)
                         }
-                            HStack(spacing: 7) {
-                                Image("Frame 52478")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 50, height: 6)
-                            }
-                        
+                        Spacer()
+                        HStack(alignment: .top, spacing: 7) {
+                            Image("Frame 52478")
+                                .resizable()
+                                .scaledToFit()
+                        }
+                        .frame(width: 50, height: 6)
+                        Spacer()
                         NavigationLink(destination: OnboardingScreen2()) {
                             Image("onboarding_next_button")
-                                .resizable()
-                                .frame(width: 48, height: 48)
-                                .cornerRadius(24)
                         }
-                        .frame(maxWidth: .infinity, alignment: .trailing)
                     }
-                    .frame(width: 343, height: 48)
+                    .frame(width: 343, height: 48);
                 }
             }
         }
     }
 }
 
-struct OnboardingScreen1_previews: PreviewProvider{
+struct OnboardingScreen1_previews: PreviewProvider {
     static var previews: some View {
         OnboardingScreen1()
     }
